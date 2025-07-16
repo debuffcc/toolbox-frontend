@@ -15,6 +15,7 @@ import SoopReplay from "./features/video/SoopReplay.tsx";
 import JsonFormat from "./features/dev/JsonFormat.tsx";
 import AgodaLowest from "./features/travel/AgodaLowest.tsx";
 import { HelmetProvider } from "react-helmet-async";
+import GoogleAd from "./components/GoogleAd.tsx";
 
 // 탭/경로 매핑
 const topTabs = [
@@ -80,56 +81,86 @@ function MainLayout() {
   if (activeTopTab === "여행") sideTabList = sideTabs.travel;
 
   return (
-    <div style={{ minHeight: "100vh", background: "#181c1f" }}>
-      <Topbar activeTopTab={activeTopTab} onTopTabChange={handleTopTabChange} />
-      <Sidebar
-        activeTab={activeSideTab}
-        onTabChange={handleSideTabChange}
-        topTab={activeTopTab}
-        tabs={sideTabList}
-      />
-      <div
-        style={{
-          marginLeft:
-            activeTopTab === "다시보기" ||
-            activeTopTab === "개발" ||
-            activeTopTab === "여행"
-              ? 120
-              : 0,
-          paddingTop: 64,
-          minHeight: "calc(100vh - 64px)",
-        }}
-      >
-        <Routes>
-          <Route path="/replay/chzzk" element={<ChzzkReplay />} />
-          <Route path="/replay/youtube" element={<YoutubeReplay />} />
-          <Route path="/replay/soop" element={<SoopReplay />} />
-          <Route path="/dev/json-format" element={<JsonFormat />} />
-          <Route path="/travel/agoda" element={<AgodaLowest />} />
-          {/* 기본 경로 리다이렉트 */}
-          <Route path="/" element={<Navigate to="/replay/chzzk" replace />} />
-          {/* 404 */}
-          <Route
-            path="*"
-            element={
-              <div style={{ color: "#fff", padding: 40, textAlign: "center" }}>
-                페이지를 찾을 수 없습니다.
-              </div>
-            }
-          />
-        </Routes>
-        <footer
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "#181c1f",
+        display: "flex",
+        justifyContent: "center",
+      }}
+    >
+      <div style={{ flex: 1 }}>
+        <Topbar
+          activeTopTab={activeTopTab}
+          onTopTabChange={handleTopTabChange}
+        />
+        <Sidebar
+          activeTab={activeSideTab}
+          onTabChange={handleSideTabChange}
+          topTab={activeTopTab}
+          tabs={sideTabList}
+        />
+        <div
           style={{
-            textAlign: "center",
-            color: "#f3f4f6",
-            fontSize: 14,
-            marginTop: 40,
-            paddingBottom: 24,
-            textShadow: "0 0 6px #fff",
+            marginLeft:
+              activeTopTab === "다시보기" ||
+              activeTopTab === "개발" ||
+              activeTopTab === "여행"
+                ? 120
+                : 0,
+            paddingTop: 64,
+            minHeight: "calc(100vh - 64px)",
           }}
         >
-          © {new Date().getFullYear()} 툴박스
-        </footer>
+          <Routes>
+            <Route path="/replay/chzzk" element={<ChzzkReplay />} />
+            <Route path="/replay/youtube" element={<YoutubeReplay />} />
+            <Route path="/replay/soop" element={<SoopReplay />} />
+            <Route path="/dev/json-format" element={<JsonFormat />} />
+            <Route path="/travel/agoda" element={<AgodaLowest />} />
+            {/* 기본 경로 리다이렉트 */}
+            <Route path="/" element={<Navigate to="/replay/chzzk" replace />} />
+            {/* 404 */}
+            <Route
+              path="*"
+              element={
+                <div
+                  style={{ color: "#fff", padding: 40, textAlign: "center" }}
+                >
+                  페이지를 찾을 수 없습니다.
+                </div>
+              }
+            />
+          </Routes>
+          <footer
+            style={{
+              textAlign: "center",
+              color: "#f3f4f6",
+              fontSize: 14,
+              marginTop: 40,
+              paddingBottom: 24,
+              textShadow: "0 0 6px #fff",
+            }}
+          >
+            © {new Date().getFullYear()} 툴박스
+          </footer>
+        </div>
+      </div>
+      {/* 우측 광고 영역 */}
+      <div
+        style={{
+          width: 320,
+          minWidth: 300,
+          marginLeft: 24,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "flex-start",
+          position: "sticky",
+          top: 80,
+          height: "100vh",
+        }}
+      >
+        <GoogleAd />
       </div>
     </div>
   );
