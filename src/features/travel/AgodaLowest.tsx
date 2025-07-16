@@ -70,10 +70,13 @@ export default function AgodaLowest() {
         children: String(children),
         adults: String(adults),
       }).toString();
-      const res = await fetch(`http://localhost:3100/agoda/prices?${params}`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
+      const res = await fetch(
+        `${process.env.API_SERVER_URL}/agoda/prices?${params}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
       console.log(res);
       if (!res.ok) throw new Error("API 오류");
       const data = await res.json();

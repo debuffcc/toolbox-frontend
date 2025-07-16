@@ -36,7 +36,9 @@ function extractVideoNo(url: string): string | null {
 async function fetchChzzkVideo(
   videoNo: string
 ): Promise<ChzzkVideoProxyResponse> {
-  const res = await fetch(`http://localhost:3100/chzzk/videos/${videoNo}`);
+  const res = await fetch(
+    `${process.env.API_SERVER_URL}/chzzk/videos/${videoNo}`
+  );
   if (!res.ok) throw new Error("동영상 정보를 불러오지 못했습니다.");
   return await res.json();
 }
