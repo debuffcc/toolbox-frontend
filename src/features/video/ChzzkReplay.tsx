@@ -32,12 +32,11 @@ function extractVideoNo(url: string): string | null {
   const match = url.match(/\/video\/(\d+)/);
   return match ? match[1] : null;
 }
-
 async function fetchChzzkVideo(
   videoNo: string
 ): Promise<ChzzkVideoProxyResponse> {
   const res = await fetch(
-    `${process.env.API_SERVER_URL}/chzzk/videos/${videoNo}`
+    `${process.env.REACT_APP_API_SERVER_URL}/chzzk/videos/${videoNo}`
   );
   if (!res.ok) throw new Error("동영상 정보를 불러오지 못했습니다.");
   return await res.json();

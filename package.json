@@ -51,7 +51,7 @@
     "@testing-library/user-event": "^14.6.1",
     "@types/jest": "^30.0.0",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^24.0.13",
+    "@types/node": "^24.0.14",
     "@types/react-datepicker": "^6.2.0"
   }
 }

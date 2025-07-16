@@ -71,7 +71,7 @@ export default function AgodaLowest() {
         adults: String(adults),
       }).toString();
       const res = await fetch(
-        `${process.env.API_SERVER_URL}/agoda/prices?${params}`,
+        `${process.env.REACT_APP_API_SERVER_URL}/agoda/prices?${params}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
