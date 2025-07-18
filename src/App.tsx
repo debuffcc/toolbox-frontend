@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -16,12 +16,15 @@ import JsonFormat from "./features/dev/JsonFormat.tsx";
 import AgodaLowest from "./features/travel/AgodaLowest.tsx";
 import { HelmetProvider } from "react-helmet-async";
 import GoogleAd from "./components/GoogleAd.tsx";
+import HashGenerator from "./features/dev/HashGenerator.tsx";
+import JwtDecode from "./features/dev/JwtDecode.tsx";
 
 // 탭/경로 매핑
 const topTabs = [
   { label: "다시보기", path: "/replay" },
   { label: "개발", path: "/dev" },
   { label: "여행", path: "/travel" },
+  { label: "해시 생성", path: "/dev/hash-generator" },
 ];
 const sideTabs = {
   replay: [
@@ -29,13 +32,18 @@ const sideTabs = {
     { label: "유튜브", path: "/replay/youtube" },
     { label: "숲", path: "/replay/soop" },
   ],
-  dev: [{ label: "JSON format", path: "/dev/json-format" }],
+  dev: [
+    { label: "JSON format", path: "/dev/json-format" },
+    { label: "해시 생성", path: "/dev/hash-generator" },
+    { label: "JWT 복호화", path: "/dev/jwt-decode" },
+  ],
   travel: [{ label: "아고다", path: "/travel/agoda" }],
 };
 
 function MainLayout() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // 현재 경로에서 상단/좌측 탭 활성화 결정
   let activeTopTab = "다시보기";
@@ -47,7 +55,11 @@ function MainLayout() {
     else activeSideTab = "치지직";
   } else if (location.pathname.startsWith("/dev")) {
     activeTopTab = "개발";
-    activeSideTab = "JSON format";
+    if (location.pathname === "/dev/json-format") activeSideTab = "JSON format";
+    else if (location.pathname === "/dev/hash-generator")
+      activeSideTab = "해시 생성";
+    else if (location.pathname === "/dev/jwt-decode")
+      activeSideTab = "JWT 복호화";
   } else if (location.pathname.startsWith("/travel")) {
     activeTopTab = "여행";
     activeSideTab = "아고다";
@@ -69,7 +81,9 @@ function MainLayout() {
       else if (tab === "유튜브") navigate("/replay/youtube");
       else if (tab === "숲") navigate("/replay/soop");
     } else if (activeTopTab === "개발") {
-      navigate("/dev/json-format");
+      if (tab === "JSON format") navigate("/dev/json-format");
+      else if (tab === "해시 생성") navigate("/dev/hash-generator");
+      else if (tab === "JWT 복호화") navigate("/dev/jwt-decode");
     } else if (activeTopTab === "여행") {
       navigate("/travel/agoda");
     }
@@ -89,11 +103,55 @@ function MainLayout() {
         justifyContent: "center",
       }}
     >
+      {/* 모바일 오버레이 사이드바 */}
+      {sidebarOpen && (
+        <div
+          style={{
+            position: "fixed",
+            top: window.innerWidth <= 600 ? 48 : 64,
+            left: 0,
+            width: "100vw",
+            height: `calc(200vh - ${window.innerWidth <= 600 ? 48 : 64}px)`,
+            background: "rgba(0,0,0,0.5)",
+            zIndex: 100,
+            display: "flex",
+          }}
+          onClick={() => setSidebarOpen(false)}
+        >
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: 220,
+              height: "100%",
+              background: "#23272b",
+              boxShadow: "2px 0 16px 0 rgba(0,0,0,0.25)",
+              zIndex: 101,
+              transition: "transform 0.2s",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Sidebar
+              activeTab={activeSideTab}
+              onTabChange={(tab) => {
+                handleSideTabChange(tab);
+                setSidebarOpen(false);
+              }}
+              topTab={activeTopTab}
+              tabs={sideTabList}
+              isOverlay={true}
+            />
+          </div>
+        </div>
+      )}
       <div style={{ flex: 1 }}>
         <Topbar
           activeTopTab={activeTopTab}
           onTopTabChange={handleTopTabChange}
+          onMenuClick={() => setSidebarOpen(true)}
         />
+        {/* PC/태블릿 사이드바 */}
         <Sidebar
           activeTab={activeSideTab}
           onTabChange={handleSideTabChange}
@@ -101,6 +159,7 @@ function MainLayout() {
           tabs={sideTabList}
         />
         <div
+          className="main-content"
           style={{
             marginLeft:
               activeTopTab === "다시보기" ||
@@ -118,6 +177,8 @@ function MainLayout() {
             <Route path="/replay/soop" element={<SoopReplay />} />
             <Route path="/dev/json-format" element={<JsonFormat />} />
             <Route path="/travel/agoda" element={<AgodaLowest />} />
+            <Route path="/dev/hash-generator" element={<HashGenerator />} />
+            <Route path="/dev/jwt-decode" element={<JwtDecode />} />
             {/* 기본 경로 리다이렉트 */}
             <Route path="/" element={<Navigate to="/replay/chzzk" replace />} />
             {/* 404 */}
@@ -148,6 +209,7 @@ function MainLayout() {
       </div>
       {/* 우측 광고 영역 */}
       <div
+        className="ad-fixed"
         style={{
           width: 320,
           minWidth: 300,

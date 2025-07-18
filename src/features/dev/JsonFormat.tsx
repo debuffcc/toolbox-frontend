@@ -201,171 +201,173 @@ export default function JsonFormat() {
           content="JSON 데이터를 보기 좋게 포맷하고, 오류 위치를 알려주는 무료 JSON 포맷터 툴입니다."
         />
       </Helmet>
-      <div
-        style={{
-          maxWidth: 720,
-          margin: "40px auto",
-          background: "#23272b",
-          borderRadius: 16,
-          boxShadow: "0 4px 24px 0 rgba(0,0,0,0.18)",
-          padding: 32,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <h2
-          style={{
-            fontWeight: 700,
-            fontSize: 24,
-            marginBottom: 20,
-            color: "#e5e7eb",
-          }}
-        >
-          JSON 포맷터
-        </h2>
+      <div style={{ width: "100%", marginLeft: 120 }}>
         <div
           style={{
-            width: "100%",
-            marginBottom: 16,
+            maxWidth: 900,
+            margin: "40px auto",
+            background: "#23272b",
+            borderRadius: 16,
+            boxShadow: "0 4px 24px 0 rgba(0,0,0,0.18)",
+            padding: 32,
             display: "flex",
-            gap: 12,
+            flexDirection: "column",
             alignItems: "center",
           }}
         >
-          <label style={{ color: "#e5e7eb", fontSize: 15 }}>
-            스페이스:
-            <input
-              type="number"
-              min={0}
-              max={8}
-              value={space}
-              onChange={(e) => setSpace(Number(e.target.value))}
-              style={{
-                width: 48,
-                marginLeft: 6,
-                padding: 4,
-                borderRadius: 6,
-                border: "1px solid #333",
-                background: "#181c1f",
-                color: "#fff",
-              }}
-            />
-          </label>
-          <label style={{ color: "#e5e7eb", fontSize: 15 }}>
-            폰트크기:
-            <input
-              type="number"
-              min={10}
-              max={32}
-              value={fontSize}
-              onChange={(e) => setFontSize(Number(e.target.value))}
-              style={{
-                width: 48,
-                marginLeft: 6,
-                padding: 4,
-                borderRadius: 6,
-                border: "1px solid #333",
-                background: "#181c1f",
-                color: "#fff",
-              }}
-            />{" "}
-            px
-          </label>
-          <button
-            onClick={handleFormat}
+          <h2
             style={{
-              padding: "6px 18px",
-              fontSize: 15,
-              background: "linear-gradient(90deg, #f3f4f6 0%, #e5e7eb 100%)",
-              color: "#181c1f",
-              border: "none",
-              borderRadius: 8,
               fontWeight: 700,
-              cursor: "pointer",
-              boxShadow: "0 2px 8px 0 rgba(243,244,246,0.12)",
+              fontSize: 24,
+              marginBottom: 20,
+              color: "#e5e7eb",
             }}
           >
-            포맷
-          </button>
-        </div>
-        <textarea
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="여기에 JSON 데이터를 붙여넣으세요"
-          style={{
-            width: "100%",
-            minHeight: 120,
-            fontSize: 15,
-            border: "1px solid #333",
-            borderRadius: 8,
-            background: "#181c1f",
-            color: "#fff",
-            marginBottom: 16,
-            padding: 12,
-            resize: "vertical",
-            boxSizing: "border-box",
-          }}
-        />
-        {showResult && error && (
-          <div style={{ color: "#ff4f4f", marginBottom: 12 }}>{error}</div>
-        )}
-        <div
-          style={{
-            width: "100%",
-            minHeight: 120,
-            background: "#181c1f",
-            color: "#e5e7eb",
-            borderRadius: 8,
-            border: "1px solid #333",
-            fontSize: fontSize,
-            padding: 12,
-            overflowX: "auto",
-            wordBreak: "break-all",
-            whiteSpace: "pre-wrap",
-            marginTop: 8,
-            position: "relative",
-            boxSizing: "border-box",
-          }}
-        >
-          {/* 복사 버튼: 포맷 결과가 있을 때만 우측 상단에 표시 */}
-          {showResult && output && (
+            JSON 포맷터
+          </h2>
+          <div
+            style={{
+              width: "100%",
+              marginBottom: 16,
+              display: "flex",
+              gap: 12,
+              alignItems: "center",
+            }}
+          >
+            <label style={{ color: "#e5e7eb", fontSize: 15 }}>
+              스페이스:
+              <input
+                type="number"
+                min={0}
+                max={8}
+                value={space}
+                onChange={(e) => setSpace(Number(e.target.value))}
+                style={{
+                  width: 48,
+                  marginLeft: 6,
+                  padding: 4,
+                  borderRadius: 6,
+                  border: "1px solid #333",
+                  background: "#181c1f",
+                  color: "#fff",
+                }}
+              />
+            </label>
+            <label style={{ color: "#e5e7eb", fontSize: 15 }}>
+              폰트크기:
+              <input
+                type="number"
+                min={10}
+                max={32}
+                value={fontSize}
+                onChange={(e) => setFontSize(Number(e.target.value))}
+                style={{
+                  width: 48,
+                  marginLeft: 6,
+                  padding: 4,
+                  borderRadius: 6,
+                  border: "1px solid #333",
+                  background: "#181c1f",
+                  color: "#fff",
+                }}
+              />{" "}
+              px
+            </label>
             <button
-              onClick={async () => {
-                await copyToClipboard(output);
-                setCopied(true);
-                setTimeout(() => setCopied(false), 1200);
-              }}
+              onClick={handleFormat}
               style={{
-                position: "absolute",
-                top: 10,
-                right: 16,
-                zIndex: 2,
-                padding: "4px 14px",
-                fontSize: 14,
-                background: copied ? "#4ade80" : "#374151",
-                color: copied ? "#222" : "#fff",
+                padding: "6px 18px",
+                fontSize: 15,
+                background: "linear-gradient(90deg, #f3f4f6 0%, #e5e7eb 100%)",
+                color: "#181c1f",
                 border: "none",
-                borderRadius: 6,
-                fontWeight: 600,
+                borderRadius: 8,
+                fontWeight: 700,
                 cursor: "pointer",
-                boxShadow: "0 1px 4px 0 rgba(0,0,0,0.10)",
-                transition: "background 0.2s, color 0.2s",
+                boxShadow: "0 2px 8px 0 rgba(243,244,246,0.12)",
               }}
-              title="복사"
             >
-              {copied ? "복사됨!" : "복사"}
+              포맷
             </button>
+          </div>
+          <textarea
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="여기에 JSON 데이터를 붙여넣으세요"
+            style={{
+              width: "100%",
+              minHeight: 120,
+              fontSize: 15,
+              border: "1px solid #333",
+              borderRadius: 8,
+              background: "#181c1f",
+              color: "#fff",
+              marginBottom: 16,
+              padding: 12,
+              resize: "vertical",
+              boxSizing: "border-box",
+            }}
+          />
+          {showResult && error && (
+            <div style={{ color: "#ff4f4f", marginBottom: 12 }}>{error}</div>
           )}
-          {showResult && linesToShow}
-          {/* 문법 하이라이트용 CSS */}
-          <style>{`
+          <div
+            style={{
+              width: "100%",
+              minHeight: 120,
+              background: "#181c1f",
+              color: "#e5e7eb",
+              borderRadius: 8,
+              border: "1px solid #333",
+              fontSize: fontSize,
+              padding: 12,
+              overflowX: "auto",
+              wordBreak: "break-all",
+              whiteSpace: "pre-wrap",
+              marginTop: 8,
+              position: "relative",
+              boxSizing: "border-box",
+            }}
+          >
+            {/* 복사 버튼: 포맷 결과가 있을 때만 우측 상단에 표시 */}
+            {showResult && output && (
+              <button
+                onClick={async () => {
+                  await copyToClipboard(output);
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 1200);
+                }}
+                style={{
+                  position: "absolute",
+                  top: 10,
+                  right: 16,
+                  zIndex: 2,
+                  padding: "4px 14px",
+                  fontSize: 14,
+                  background: copied ? "#4ade80" : "#374151",
+                  color: copied ? "#222" : "#fff",
+                  border: "none",
+                  borderRadius: 6,
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  boxShadow: "0 1px 4px 0 rgba(0,0,0,0.10)",
+                  transition: "background 0.2s, color 0.2s",
+                }}
+                title="복사"
+              >
+                {copied ? "복사됨!" : "복사"}
+              </button>
+            )}
+            {showResult && linesToShow}
+            {/* 문법 하이라이트용 CSS */}
+            <style>{`
             .json-key     { color: #7dd3fc; }
             .json-string  { color: #d291e4; }
             .json-number  { color: #7ec3fa; }
             .json-boolean { color: #facc15; }
             .json-null    { color: #facc15; }
           `}</style>
+          </div>
         </div>
       </div>
     </>

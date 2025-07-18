@@ -5,6 +5,7 @@ interface SidebarProps {
   onTabChange: (tab: string) => void;
   topTab: string;
   tabs: { label: string; path: string }[];
+  isOverlay?: boolean;
 }
 
 export default function Sidebar({
@@ -12,19 +13,21 @@ export default function Sidebar({
   onTabChange,
   topTab,
   tabs,
+  isOverlay = false,
 }: SidebarProps) {
   return (
     <aside
+      className={isOverlay ? "sidebar-overlay" : "sidebar-fixed"}
       style={{
-        width: 120,
+        width: isOverlay ? "100%" : 120,
         background: "#23272b",
         height: "100vh",
-        paddingTop: 64,
+        paddingTop: isOverlay ? 0 : 64,
         display: "flex",
         flexDirection: "column",
         alignItems: "stretch",
         boxShadow: "2px 0 8px 0 rgba(0,0,0,0.10)",
-        position: "fixed",
+        position: isOverlay ? "static" : "fixed",
         left: 0,
         top: 0,
         zIndex: 10,

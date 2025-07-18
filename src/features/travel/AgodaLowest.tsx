@@ -98,112 +98,113 @@ export default function AgodaLowest() {
           content="아고다 호텔 최저가를 빠르게 확인하는 무료 크롤러 툴입니다."
         />
       </Helmet>
-      <div
-        style={{
-          maxWidth: 800,
-          margin: "40px auto",
-          background: "#23272b",
-          borderRadius: 16,
-          boxShadow: "0 4px 24px 0 rgba(0,0,0,0.18)",
-          padding: 32,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <h2
+      <div style={{ width: "100%", marginLeft: 120 }}>
+        <div
           style={{
-            fontWeight: 700,
-            fontSize: 24,
-            marginBottom: 20,
-            color: "#e5e7eb",
+            maxWidth: 900,
+            margin: "40px auto",
+            background: "#23272b",
+            borderRadius: 16,
+            boxShadow: "0 4px 24px 0 rgba(0,0,0,0.18)",
+            padding: 32,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          아고다 최저가 찾기
-        </h2>
-        <div style={{ width: "100%", marginBottom: 16 }}>
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="아고다 호텔 주소를 입력하세요"
+          <h2
             style={{
-              width: "100%",
-              padding: 12,
-              fontSize: 16,
-              border: "1px solid #333",
-              borderRadius: 8,
-              outline: "none",
-              background: "#181c1f",
-              color: "#fff",
-              marginBottom: 10,
-            }}
-          />
-          {/* 날짜 입력 UI */}
-          <div
-            style={{
-              display: "flex",
-              gap: 16,
-              marginBottom: 24,
-              width: "100%",
-              justifyContent: "center",
+              fontWeight: 700,
+              fontSize: 24,
+              marginBottom: 20,
+              color: "#e5e7eb",
             }}
           >
+            아고다 최저가 찾기
+          </h2>
+          <div style={{ width: "100%", marginBottom: 16 }}>
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="아고다 호텔 주소를 입력하세요"
+              style={{
+                width: "100%",
+                padding: 12,
+                fontSize: 16,
+                border: "1px solid #333",
+                borderRadius: 8,
+                outline: "none",
+                background: "#181c1f",
+                color: "#fff",
+                marginBottom: 10,
+              }}
+            />
+            {/* 날짜 입력 UI */}
             <div
               style={{
                 display: "flex",
-                alignItems: "center",
-                background: "#23272b",
-                borderRadius: 12,
-                border: "2px solid #2dd4bf",
-                padding: "12px 20px",
-                minWidth: 220,
-                gap: 12,
+                gap: 16,
+                marginBottom: 24,
+                width: "100%",
+                justifyContent: "center",
               }}
             >
-              <FaCalendarAlt color="#2dd4bf" size={22} />
-              <div>
-                <div style={{ fontSize: 13, color: "#aaa", marginBottom: 2 }}>
-                  체크인
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  background: "#23272b",
+                  borderRadius: 12,
+                  border: "2px solid #2dd4bf",
+                  padding: "12px 20px",
+                  minWidth: 220,
+                  gap: 12,
+                }}
+              >
+                <FaCalendarAlt color="#2dd4bf" size={22} />
+                <div>
+                  <div style={{ fontSize: 13, color: "#aaa", marginBottom: 2 }}>
+                    체크인
+                  </div>
+                  <input
+                    type="date"
+                    value={checkIn}
+                    onChange={(e) => setCheckIn(e.target.value)}
+                    style={{
+                      background: "#181c1f",
+                      color: "#fff",
+                      border: "1px solid #333",
+                      borderRadius: 6,
+                      padding: "4px 8px",
+                      fontSize: 15,
+                    }}
+                  />
                 </div>
-                <input
-                  type="date"
-                  value={checkIn}
-                  onChange={(e) => setCheckIn(e.target.value)}
-                  style={{
-                    background: "#181c1f",
-                    color: "#fff",
-                    border: "1px solid #333",
-                    borderRadius: 6,
-                    padding: "4px 8px",
-                    fontSize: 15,
-                  }}
-                />
-              </div>
-              <div>
-                <div style={{ fontSize: 13, color: "#aaa", marginBottom: 2 }}>
-                  체크아웃
+                <div>
+                  <div style={{ fontSize: 13, color: "#aaa", marginBottom: 2 }}>
+                    체크아웃
+                  </div>
+                  <input
+                    type="date"
+                    value={checkOut}
+                    onChange={(e) => setCheckOut(e.target.value)}
+                    style={{
+                      background: "#181c1f",
+                      color: "#fff",
+                      border: "1px solid #333",
+                      borderRadius: 6,
+                      padding: "4px 8px",
+                      fontSize: 15,
+                    }}
+                  />
                 </div>
-                <input
-                  type="date"
-                  value={checkOut}
-                  onChange={(e) => setCheckOut(e.target.value)}
-                  style={{
-                    background: "#181c1f",
-                    color: "#fff",
-                    border: "1px solid #333",
-                    borderRadius: 6,
-                    padding: "4px 8px",
-                    fontSize: 15,
-                  }}
-                />
               </div>
             </div>
-          </div>
-          {/* 필요시 인원/객실 박스도 옆에 추가 */}
+            {/* 필요시 인원/객실 박스도 옆에 추가 */}
 
-          {/* DatePicker는 숨김 input으로 두고, withPortal로 캘린더만 띄움 */}
-          {/* <DatePicker
+            {/* DatePicker는 숨김 input으로 두고, withPortal로 캘린더만 띄움 */}
+            {/* <DatePicker
             id="date-picker"
             selectsRange
             startDate={startDate}
@@ -234,187 +235,189 @@ export default function AgodaLowest() {
               />
             }
           /> */}
-          <div
-            style={{
-              display: "flex",
-              gap: 12,
-              alignItems: "center",
-              marginTop: 8,
-            }}
-          >
-            <label style={{ color: "#e5e7eb", minWidth: 60 }}>방 개수</label>
-            <input
-              type="number"
-              min={1}
-              value={rooms}
-              onChange={(e) => setRooms(Number(e.target.value))}
-              placeholder="1"
+            <div
               style={{
-                width: 70,
-                padding: 12,
-                fontSize: 16,
-                border: "1px solid #333",
-                borderRadius: 8,
-                background: "#181c1f",
-                color: "#fff",
-              }}
-            />
-            <label style={{ color: "#e5e7eb", minWidth: 60 }}>성인수</label>
-            <input
-              type="number"
-              min={1}
-              value={adults}
-              onChange={(e) => setAdults(Number(e.target.value))}
-              placeholder="2"
-              style={{
-                width: 70,
-                padding: 12,
-                fontSize: 16,
-                border: "1px solid #333",
-                borderRadius: 8,
-                background: "#181c1f",
-                color: "#fff",
-              }}
-            />
-            <label style={{ color: "#e5e7eb", minWidth: 60 }}>아이수</label>
-            <input
-              type="number"
-              min={0}
-              value={children}
-              onChange={(e) => setChildren(Number(e.target.value))}
-              placeholder="0"
-              style={{
-                width: 70,
-                padding: 12,
-                fontSize: 16,
-                border: "1px solid #333",
-                borderRadius: 8,
-                background: "#181c1f",
-                color: "#fff",
-              }}
-            />
-            <button
-              onClick={handleSearch}
-              disabled={loading}
-              style={{
-                padding: "0 24px",
-                fontSize: 16,
-                background: "linear-gradient(90deg, #f3f4f6 0%, #e5e7eb 100%)",
-                color: "#181c1f",
-                border: "none",
-                borderRadius: 8,
-                fontWeight: 700,
-                cursor: loading ? "not-allowed" : "pointer",
-                height: 44,
-                boxShadow: "0 2px 8px 0 rgba(243,244,246,0.12)",
+                display: "flex",
+                gap: 12,
+                alignItems: "center",
+                marginTop: 8,
               }}
             >
-              {loading ? "조회 중..." : "최저가 조회"}
-            </button>
-          </div>
-        </div>
-        {error && (
-          <div style={{ color: "#ff4f4f", marginBottom: 12 }}>{error}</div>
-        )}
-        {results.length > 0 && (
-          <div style={{ width: "100%", marginTop: 16 }}>
-            {/* 최저가 안내를 테이블 위로 이동, 링크도 함께 표시 */}
-            {min && (
-              <div
+              <label style={{ color: "#e5e7eb", minWidth: 60 }}>방 개수</label>
+              <input
+                type="number"
+                min={1}
+                value={rooms}
+                onChange={(e) => setRooms(Number(e.target.value))}
+                placeholder="1"
                 style={{
-                  marginBottom: 16,
-                  color: "#2dd4bf",
+                  width: 70,
+                  padding: 12,
+                  fontSize: 16,
+                  border: "1px solid #333",
+                  borderRadius: 8,
+                  background: "#181c1f",
+                  color: "#fff",
+                }}
+              />
+              <label style={{ color: "#e5e7eb", minWidth: 60 }}>성인수</label>
+              <input
+                type="number"
+                min={1}
+                value={adults}
+                onChange={(e) => setAdults(Number(e.target.value))}
+                placeholder="2"
+                style={{
+                  width: 70,
+                  padding: 12,
+                  fontSize: 16,
+                  border: "1px solid #333",
+                  borderRadius: 8,
+                  background: "#181c1f",
+                  color: "#fff",
+                }}
+              />
+              <label style={{ color: "#e5e7eb", minWidth: 60 }}>아이수</label>
+              <input
+                type="number"
+                min={0}
+                value={children}
+                onChange={(e) => setChildren(Number(e.target.value))}
+                placeholder="0"
+                style={{
+                  width: 70,
+                  padding: 12,
+                  fontSize: 16,
+                  border: "1px solid #333",
+                  borderRadius: 8,
+                  background: "#181c1f",
+                  color: "#fff",
+                }}
+              />
+              <button
+                onClick={handleSearch}
+                disabled={loading}
+                style={{
+                  padding: "0 24px",
+                  fontSize: 16,
+                  background:
+                    "linear-gradient(90deg, #f3f4f6 0%, #e5e7eb 100%)",
+                  color: "#181c1f",
+                  border: "none",
+                  borderRadius: 8,
                   fontWeight: 700,
-                  fontSize: 18,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 16,
+                  cursor: loading ? "not-allowed" : "pointer",
+                  height: 44,
+                  boxShadow: "0 2px 8px 0 rgba(243,244,246,0.12)",
                 }}
               >
-                <span>
-                  최저가: {min.label} -{" "}
-                  {min.price ? min.price.toLocaleString() + "원" : "-"}
-                </span>
-                {min.url && (
-                  <a
-                    href={min.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      color: "#fff",
-                      background: "#2dd4bf",
-                      borderRadius: 6,
-                      padding: "4px 14px",
-                      fontWeight: 700,
-                      fontSize: 15,
-                      marginLeft: 8,
-                      textDecoration: "none",
-                      transition: "background 0.2s",
-                    }}
-                  >
-                    바로가기
-                  </a>
-                )}
-              </div>
-            )}
-            <table
-              style={{
-                width: "100%",
-                background: "#181c1f",
-                borderRadius: 8,
-                color: "#e5e7eb",
-                borderCollapse: "collapse",
-              }}
-            >
-              <thead>
-                <tr style={{ borderBottom: "2px solid #333" }}>
-                  {/* <th style={{ padding: 8 }}>CID</th> */}
-                  <th style={{ padding: 8 }}>제휴사</th>
-                  <th style={{ padding: 8 }}>호텔명</th>
-                  <th style={{ padding: 8 }}>가격</th>
-                  <th style={{ padding: 8 }}>링크</th>
-                </tr>
-              </thead>
-              <tbody>
-                {results.map((r) => (
-                  <tr
-                    key={r.label}
-                    style={{
-                      background:
-                        min && r.label === min.label ? "#2dd4bf" : undefined,
-                      color:
-                        min && r.label === min.label ? "#181c1f" : undefined,
-                      fontWeight: min && r.label === min.label ? 700 : 400,
-                    }}
-                  >
-                    {/* <td style={{ padding: 8 }}>{r.cid}</td> */}
-                    <td style={{ padding: 8 }}>{r.label}</td>
-                    <td style={{ padding: 8 }}>{r.hotelName || "-"}</td>
-                    <td style={{ padding: 8 }}>
-                      {r.price ? r.price.toLocaleString() + "원" : "-"}
-                    </td>
-                    <td style={{ padding: 8 }}>
-                      <a
-                        href={r.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{
-                          color:
-                            min && r.label === min.label
-                              ? "#181c1f"
-                              : "#2dd4bf",
-                          fontWeight: 700,
-                        }}
-                      >
-                        바로가기
-                      </a>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                {loading ? "조회 중..." : "최저가 조회"}
+              </button>
+            </div>
           </div>
-        )}
+          {error && (
+            <div style={{ color: "#ff4f4f", marginBottom: 12 }}>{error}</div>
+          )}
+          {results.length > 0 && (
+            <div style={{ width: "100%", marginTop: 16 }}>
+              {/* 최저가 안내를 테이블 위로 이동, 링크도 함께 표시 */}
+              {min && (
+                <div
+                  style={{
+                    marginBottom: 16,
+                    color: "#2dd4bf",
+                    fontWeight: 700,
+                    fontSize: 18,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 16,
+                  }}
+                >
+                  <span>
+                    최저가: {min.label} -{" "}
+                    {min.price ? min.price.toLocaleString() + "원" : "-"}
+                  </span>
+                  {min.url && (
+                    <a
+                      href={min.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        color: "#fff",
+                        background: "#2dd4bf",
+                        borderRadius: 6,
+                        padding: "4px 14px",
+                        fontWeight: 700,
+                        fontSize: 15,
+                        marginLeft: 8,
+                        textDecoration: "none",
+                        transition: "background 0.2s",
+                      }}
+                    >
+                      바로가기
+                    </a>
+                  )}
+                </div>
+              )}
+              <table
+                style={{
+                  width: "100%",
+                  background: "#181c1f",
+                  borderRadius: 8,
+                  color: "#e5e7eb",
+                  borderCollapse: "collapse",
+                }}
+              >
+                <thead>
+                  <tr style={{ borderBottom: "2px solid #333" }}>
+                    {/* <th style={{ padding: 8 }}>CID</th> */}
+                    <th style={{ padding: 8 }}>제휴사</th>
+                    <th style={{ padding: 8 }}>호텔명</th>
+                    <th style={{ padding: 8 }}>가격</th>
+                    <th style={{ padding: 8 }}>링크</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {results.map((r) => (
+                    <tr
+                      key={r.label}
+                      style={{
+                        background:
+                          min && r.label === min.label ? "#2dd4bf" : undefined,
+                        color:
+                          min && r.label === min.label ? "#181c1f" : undefined,
+                        fontWeight: min && r.label === min.label ? 700 : 400,
+                      }}
+                    >
+                      {/* <td style={{ padding: 8 }}>{r.cid}</td> */}
+                      <td style={{ padding: 8 }}>{r.label}</td>
+                      <td style={{ padding: 8 }}>{r.hotelName || "-"}</td>
+                      <td style={{ padding: 8 }}>
+                        {r.price ? r.price.toLocaleString() + "원" : "-"}
+                      </td>
+                      <td style={{ padding: 8 }}>
+                        <a
+                          href={r.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            color:
+                              min && r.label === min.label
+                                ? "#181c1f"
+                                : "#2dd4bf",
+                            fontWeight: 700,
+                          }}
+                        >
+                          바로가기
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       </div>
     </>
   );

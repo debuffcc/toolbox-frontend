@@ -1,13 +1,100 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+/* 반응형 레이아웃: 모바일/태블릿/PC */
+@media (max-width: 1200px) {
+  body {
+    background: #181c1f;
+  }
+  .sidebar-fixed {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 80px !important;
+    min-width: 80px !important;
+    z-index: 10;
+    padding-top: 56px !important;
+  }
+  .main-content {
+    margin-left: 80px !important;
+    max-width: 100vw !important;
+  }
+  .ad-fixed {
+    display: none !important;
+  }
+}
+@media (max-width: 900px) {
+  .sidebar-fixed {
+    width: 56px !important;
+    min-width: 56px !important;
+    padding-top: 48px !important;
+  }
+  .main-content {
+    margin-left: 0 !important;
+    max-width: 100vw !important;
+    padding: 0 4vw !important;
+  }
+  .ad-fixed {
+    display: none !important;
+  }
+  .main-content > div {
+    margin: 24px 0 0 0 !important;
+  }
+  .topbar-hamburger {
+    display: block !important;
+  }
+}
+@media (max-width: 600px) {
+  .sidebar-fixed {
+    display: none !important;
+  }
+  .main-content {
+    margin-left: 0 !important;
+    max-width: 100vw !important;
+    padding: 0 2vw !important;
+    padding-top: 48px !important;
+  }
+  .ad-fixed {
+    display: none !important;
+  }
+  .topbar-fixed {
+    padding-left: 0 !important;
+    font-size: 16px !important;
+    height: 48px !important;
+  }
+}
+
+.sidebar-overlay {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  background: #23272b;
+  position: fixed;
+  top: 64px;
+  left: 0;
+  height: calc(100vh - 64px);
+  width: 220px;
+  box-shadow: 2px 0 16px 0 rgba(0, 0, 0, 0.25);
+  z-index: 101;
+}
+@media (max-width: 600px) {
+  .sidebar-overlay {
+    top: 48px;
+    height: calc(100vh - 48px);
+  }
+}
+
+.topbar-tab-scroll::-webkit-scrollbar {
+  display: none;
 }
