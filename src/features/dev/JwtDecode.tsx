@@ -87,6 +87,10 @@ export default function JwtDecode() {
     <>
       <Helmet>
         <title>JWT 복호화 - 툴박스</title>
+        <meta
+          name="description"
+          content="JWT 토큰을 쉽게 복호화하고, 페이로드를 확인할 수 있는 툴입니다."
+        />
       </Helmet>
       <div style={{ width: "100%", marginLeft: 120 }}>
         <div

@@ -21,10 +21,10 @@ export default function SoopReplay() {
   return (
     <>
       <Helmet>
-        <title>숲 다시보기 - 툴박스</title>
+        <title>숲 다시보기 다운로드 - 툴박스</title>
         <meta
           name="description"
-          content="숲 방송 다시보기를 쉽고 빠르게 검색하고 시청할 수 있는 툴입니다."
+          content="숲 다시보기 다운로드, 숲 영상 추출, 다양한 영상 툴을 제공합니다."
         />
       </Helmet>
       <div style={{ width: "100%", marginLeft: 120 }}>

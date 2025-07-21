@@ -26,10 +26,10 @@ export default function YoutubeReplay() {
   return (
     <>
       <Helmet>
-        <title>유튜브 다시보기 - 툴박스</title>
+        <title>유튜브 다시보기 다운로드 - 툴박스</title>
         <meta
           name="description"
-          content="유튜브 방송 다시보기를 쉽고 빠르게 검색하고 시청할 수 있는 툴입니다."
+          content="유튜브 다시보기 다운로드, 유튜브 영상 추출, 다양한 영상 툴을 제공합니다."
         />
       </Helmet>
       <div style={{ width: "100%", marginLeft: 120 }}>

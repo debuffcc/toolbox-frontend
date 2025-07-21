@@ -195,10 +195,10 @@ export default function JsonFormat() {
   return (
     <>
       <Helmet>
-        <title>JSON 포맷터 - 툴박스</title>
+        <title>JSON 포맷 변환기 - 툴박스</title>
         <meta
           name="description"
-          content="JSON 데이터를 보기 좋게 포맷하고, 오류 위치를 알려주는 무료 JSON 포맷터 툴입니다."
+          content="JSON 포맷 변환, 보기 좋게 정렬, 복사 등 개발자를 위한 편리한 툴을 제공합니다."
         />
       </Helmet>
       <div style={{ width: "100%", marginLeft: 120 }}>

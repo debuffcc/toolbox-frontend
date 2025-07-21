@@ -92,10 +92,10 @@ export default function AgodaLowest() {
   return (
     <>
       <Helmet>
-        <title>아고다 최저가 크롤러 - 툴박스</title>
+        <title>아고다 최저가 검색 - 툴박스</title>
         <meta
           name="description"
-          content="아고다 호텔 최저가를 빠르게 확인하는 무료 크롤러 툴입니다."
+          content="아고다 호텔 최저가 검색, 빠른 가격 비교 등 여행자를 위한 편리한 툴을 제공합니다."
         />
       </Helmet>
       <div style={{ width: "100%", marginLeft: 120 }}>

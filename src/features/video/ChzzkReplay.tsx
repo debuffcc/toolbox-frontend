@@ -114,10 +114,10 @@ export default function ChzzkReplay() {
   return (
     <>
       <Helmet>
-        <title>치지직 다시보기 - 툴박스</title>
+        <title>치지직 다시보기 다운로드 - 툴박스</title>
         <meta
           name="description"
-          content="치지직 방송 다시보기를 쉽고 빠르게 검색하고 시청할 수 있는 툴입니다."
+          content="치지직 다시보기 다운로드, 치지직 영상 추출, 관련 동영상 탐색 등 다양한 툴을 제공합니다."
         />
       </Helmet>
       <div style={{ width: "100%", marginLeft: 120 }}>

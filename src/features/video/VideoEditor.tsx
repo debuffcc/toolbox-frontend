@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import "rc-slider/assets/index.css";
+import { Helmet } from "react-helmet-async";
 
 function fetchFile(file: File): Promise<Uint8Array> {
   return new Promise((resolve, reject) => {
@@ -237,6 +238,13 @@ export default function VideoEditor() {
         justifyContent: "flex-start",
       }}
     >
+      <Helmet>
+        <title>영상 자르기, 구간 편집 - 툴박스</title>
+        <meta
+          name="description"
+          content="여러 구간을 선택해 영상 자르기, 합치기, 편집 등 다양한 영상 툴을 제공합니다."
+        />
+      </Helmet>
       <div
         style={{
           maxWidth: 900,

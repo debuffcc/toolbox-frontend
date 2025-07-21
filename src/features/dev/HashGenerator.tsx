@@ -92,7 +92,7 @@ export default function HashGenerator() {
         <title>해시 생성기 - 툴박스</title>
         <meta
           name="description"
-          content="SHA, HMAC 등 다양한 해시를 생성하는 툴입니다."
+          content="SHA256, SHA512, MD5 등 다양한 해시값을 빠르게 생성할 수 있는 툴입니다."
         />
       </Helmet>
       <div style={{ width: "100%", marginLeft: 120 }}>
