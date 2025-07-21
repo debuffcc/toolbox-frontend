@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -46,6 +46,20 @@ function MainLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const mainContentRef = useRef<HTMLDivElement>(null);
+  const [adLeft, setAdLeft] = useState<number | null>(null);
+
+  useEffect(() => {
+    function updateAdLeft() {
+      if (mainContentRef.current) {
+        const rect = mainContentRef.current.getBoundingClientRect();
+        setAdLeft(rect.right + 100);
+      }
+    }
+    updateAdLeft();
+    window.addEventListener("resize", updateAdLeft);
+    return () => window.removeEventListener("resize", updateAdLeft);
+  }, []);
 
   // 현재 경로에서 상단/좌측 탭 활성화 결정
   let activeTopTab = "다시보기";
@@ -102,10 +116,9 @@ function MainLayout() {
   return (
     <div
       style={{
+        position: "relative",
         minHeight: "100vh",
         background: "#181c1f",
-        display: "flex",
-        justifyContent: "center",
       }}
     >
       {/* 모바일 오버레이 사이드바 */}
@@ -150,7 +163,22 @@ function MainLayout() {
           </div>
         </div>
       )}
-      <div style={{ flex: 1 }}>
+      {/* 메인 컨텐츠 */}
+      <div
+        className="main-content"
+        ref={mainContentRef}
+        style={{
+          maxWidth: 900,
+          width: "100%",
+          margin: "0 auto",
+          marginLeft: 120, // 사이드바로부터 120px 떨어진 위치에 오도록
+          paddingTop: 64,
+          minHeight: "calc(100vh - 64px)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
         <Topbar
           activeTopTab={activeTopTab}
           onTopTabChange={handleTopTabChange}
@@ -163,61 +191,50 @@ function MainLayout() {
           topTab={activeTopTab}
           tabs={sideTabList}
         />
-        <div
-          className="main-content"
-          style={{
-            marginLeft:
-              activeTopTab === "다시보기" ||
-              activeTopTab === "개발" ||
-              activeTopTab === "여행"
-                ? 120
-                : 0,
-            paddingTop: 64,
-            minHeight: "calc(100vh - 64px)",
-          }}
-        >
-          <Routes>
-            <Route path="/replay/chzzk" element={<ChzzkReplay />} />
-            <Route path="/replay/youtube" element={<YoutubeReplay />} />
-            <Route path="/replay/soop" element={<SoopReplay />} />
-            <Route path="/replay/video-edit" element={<VideoEditor />} />
-            <Route path="/dev/json-format" element={<JsonFormat />} />
-            <Route path="/travel/agoda" element={<AgodaLowest />} />
-            <Route path="/dev/hash-generator" element={<HashGenerator />} />
-            <Route path="/dev/jwt-decode" element={<JwtDecode />} />
-            {/* 기본 경로 리다이렉트 */}
-            <Route path="/" element={<Navigate to="/replay/chzzk" replace />} />
-            {/* 404 */}
-            <Route
-              path="*"
-              element={
-                <div
-                  style={{ color: "#fff", padding: 40, textAlign: "center" }}
-                >
-                  페이지를 찾을 수 없습니다.
-                </div>
-              }
-            />
-          </Routes>
-        </div>
+        <Routes>
+          <Route path="/replay/chzzk" element={<ChzzkReplay />} />
+          <Route path="/replay/youtube" element={<YoutubeReplay />} />
+          <Route path="/replay/soop" element={<SoopReplay />} />
+          <Route path="/replay/video-edit" element={<VideoEditor />} />
+          <Route path="/dev/json-format" element={<JsonFormat />} />
+          <Route path="/travel/agoda" element={<AgodaLowest />} />
+          <Route path="/dev/hash-generator" element={<HashGenerator />} />
+          <Route path="/dev/jwt-decode" element={<JwtDecode />} />
+          {/* 기본 경로 리다이렉트 */}
+          <Route path="/" element={<Navigate to="/replay/chzzk" replace />} />
+          {/* 404 */}
+          <Route
+            path="*"
+            element={
+              <div style={{ color: "#fff", padding: 40, textAlign: "center" }}>
+                페이지를 찾을 수 없습니다.
+              </div>
+            }
+          />
+        </Routes>
       </div>
-      {/* 우측 광고 영역 */}
-      <div
-        className="ad-fixed"
-        style={{
-          width: 320,
-          minWidth: 300,
-          marginLeft: 24,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "flex-start",
-          position: "sticky",
-          top: 80,
-          height: "100vh",
-        }}
-      >
-        <GoogleAd />
-      </div>
+      {/* 광고 영역: 1200px 이상에서만 표시, 서비스 영역 오른쪽에서 100px 떨어진 위치에 고정 */}
+      {typeof window !== "undefined" &&
+        window.innerWidth > 1200 &&
+        adLeft !== null && (
+          <div
+            className="ad-fixed"
+            style={{
+              width: 320,
+              minWidth: 300,
+              position: "fixed",
+              left: adLeft,
+              top: 80,
+              height: "600px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "flex-start",
+              zIndex: 100,
+            }}
+          >
+            <GoogleAd />
+          </div>
+        )}
       <footer
         style={{
           position: "fixed",
