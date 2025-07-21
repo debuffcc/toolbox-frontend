@@ -213,14 +213,63 @@ export default function VideoEditor() {
     }
   };
 
+  // 마지막 구간 제거 함수
+  const handleRemoveLastClip = () => {
+    setClips((prev) => prev.slice(0, -1));
+  };
+
+  // 구간 초기화 함수
+  const handleResetClips = () => {
+    setClips([]);
+    setStart("0");
+    setEnd("");
+    setError("");
+  };
+
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "j" || e.key === "J") {
+      if (e.key === "q" || e.key === "Q") {
         setStartToCurrent();
-      } else if (e.key === "k" || e.key === "K") {
+      } else if (e.key === "e" || e.key === "E") {
         setEndToCurrent();
       } else if (e.key === "a" || e.key === "A") {
         handleAddClip();
+      } else if (e.key === "c" || e.key === "C") {
+        handleResetClips();
+      } else if (e.key === "z" || e.key === "Z") {
+        handleRemoveLastClip();
+      } else if (e.key === "ArrowLeft" && e.shiftKey) {
+        // 5분 뒤로
+        if (videoRef.current) {
+          videoRef.current.currentTime = Math.max(
+            0,
+            videoRef.current.currentTime - 300
+          );
+        }
+      } else if (e.key === "ArrowRight" && e.shiftKey) {
+        // 5분 앞으로
+        if (videoRef.current) {
+          videoRef.current.currentTime = Math.min(
+            videoRef.current.duration,
+            videoRef.current.currentTime + 300
+          );
+        }
+      } else if (e.key === "ArrowLeft") {
+        // 5초 뒤로
+        if (videoRef.current) {
+          videoRef.current.currentTime = Math.max(
+            0,
+            videoRef.current.currentTime - 5
+          );
+        }
+      } else if (e.key === "ArrowRight") {
+        // 5초 앞으로
+        if (videoRef.current) {
+          videoRef.current.currentTime = Math.min(
+            videoRef.current.duration,
+            videoRef.current.currentTime + 5
+          );
+        }
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -304,9 +353,13 @@ export default function VideoEditor() {
 영상 자르기 사용법
 
 - 파일 선택 후 영상을 재생/탐색하며 원하는 구간을 지정하세요.
-- [J] : 현재 위치를 구간 시작으로 지정
-- [K] : 현재 위치를 구간 끝으로 지정
+- [Q] : 현재 위치를 구간 시작으로 지정
+- [E] : 현재 위치를 구간 끝으로 지정
 - [A] : 구간 추가
+- [Z] : 마지막 구간 제거
+- [C] : 구간 초기화
+- [←/→] : 5초 단위로 앞/뒤로 이동
+- [Shift+←/Shift+→] : 5분 단위로 앞/뒤로 이동
 
 - 여러 구간을 추가한 뒤 "구간 합치기"를 누르면, 모든 구간이 하나의 영상으로 합쳐집니다.
 - 구간 리스트에서 삭제도 가능합니다.
@@ -456,7 +509,7 @@ export default function VideoEditor() {
                     cursor: "pointer",
                   }}
                 >
-                  구간 시작(현재 위치) [J]
+                  구간 시작(현재 위치) [Q]
                 </button>
                 <button
                   onClick={setEndToCurrent}
@@ -471,7 +524,37 @@ export default function VideoEditor() {
                     cursor: "pointer",
                   }}
                 >
-                  구간 끝(현재 위치) [K]
+                  구간 끝(현재 위치) [E]
+                </button>
+                <button
+                  onClick={handleRemoveLastClip}
+                  style={{
+                    padding: "6px 16px",
+                    borderRadius: 8,
+                    border: "none",
+                    background: "#fbbf24",
+                    color: "#181c1f",
+                    fontWeight: 700,
+                    fontSize: 15,
+                    cursor: "pointer",
+                  }}
+                >
+                  마지막 구간 제거 [Z]
+                </button>
+                <button
+                  onClick={handleResetClips}
+                  style={{
+                    padding: "6px 16px",
+                    borderRadius: 8,
+                    border: "none",
+                    background: "#f87171",
+                    color: "#fff",
+                    fontWeight: 700,
+                    fontSize: 15,
+                    cursor: "pointer",
+                  }}
+                >
+                  구간 초기화 [C]
                 </button>
               </div>
             </div>
