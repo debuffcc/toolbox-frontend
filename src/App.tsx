@@ -119,6 +119,8 @@ function MainLayout() {
         position: "relative",
         minHeight: "100vh",
         background: "#181c1f",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       {/* 모바일 오버레이 사이드바 */}
@@ -163,91 +165,91 @@ function MainLayout() {
           </div>
         </div>
       )}
-      {/* 메인 컨텐츠 */}
-      <div
-        className="main-content"
-        ref={mainContentRef}
-        style={{
-          maxWidth: 900,
-          width: "100%",
-          margin: "0 auto",
-          marginLeft: 120, // 사이드바로부터 120px 떨어진 위치에 오도록
-          paddingTop: 64,
-          minHeight: "calc(100vh - 64px)",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Topbar
-          activeTopTab={activeTopTab}
-          onTopTabChange={handleTopTabChange}
-          onMenuClick={() => setSidebarOpen(true)}
-        />
-        {/* PC/태블릿 사이드바 */}
-        <Sidebar
-          activeTab={activeSideTab}
-          onTabChange={handleSideTabChange}
-          topTab={activeTopTab}
-          tabs={sideTabList}
-        />
-        <Routes>
-          <Route path="/replay/chzzk" element={<ChzzkReplay />} />
-          <Route path="/replay/youtube" element={<YoutubeReplay />} />
-          <Route path="/replay/soop" element={<SoopReplay />} />
-          <Route path="/replay/video-edit" element={<VideoEditor />} />
-          <Route path="/dev/json-format" element={<JsonFormat />} />
-          <Route path="/travel/agoda" element={<AgodaLowest />} />
-          <Route path="/dev/hash-generator" element={<HashGenerator />} />
-          <Route path="/dev/jwt-decode" element={<JwtDecode />} />
-          {/* 기본 경로 리다이렉트 */}
-          <Route path="/" element={<Navigate to="/replay/chzzk" replace />} />
-          {/* 404 */}
-          <Route
-            path="*"
-            element={
-              <div style={{ color: "#fff", padding: 40, textAlign: "center" }}>
-                페이지를 찾을 수 없습니다.
-              </div>
-            }
+      <div style={{ display: "flex", flex: 1 }}>
+        {/* 메인 컨텐츠 */}
+        <div
+          className="main-content"
+          ref={mainContentRef}
+          style={{
+            maxWidth: 900,
+            width: "100%",
+            margin: "0 auto",
+            marginLeft: 120, // 사이드바로부터 120px 떨어진 위치에 오도록
+            paddingTop: 64,
+            minHeight: "calc(100vh - 64px)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Topbar
+            activeTopTab={activeTopTab}
+            onTopTabChange={handleTopTabChange}
+            onMenuClick={() => setSidebarOpen(true)}
           />
-        </Routes>
+          {/* PC/태블릿 사이드바 */}
+          <Sidebar
+            activeTab={activeSideTab}
+            onTabChange={handleSideTabChange}
+            topTab={activeTopTab}
+            tabs={sideTabList}
+          />
+          <Routes>
+            <Route path="/replay/chzzk" element={<ChzzkReplay />} />
+            <Route path="/replay/youtube" element={<YoutubeReplay />} />
+            <Route path="/replay/soop" element={<SoopReplay />} />
+            <Route path="/replay/video-edit" element={<VideoEditor />} />
+            <Route path="/dev/json-format" element={<JsonFormat />} />
+            <Route path="/travel/agoda" element={<AgodaLowest />} />
+            <Route path="/dev/hash-generator" element={<HashGenerator />} />
+            <Route path="/dev/jwt-decode" element={<JwtDecode />} />
+            {/* 기본 경로 리다이렉트 */}
+            <Route path="/" element={<Navigate to="/replay/chzzk" replace />} />
+            {/* 404 */}
+            <Route
+              path="*"
+              element={
+                <div
+                  style={{ color: "#fff", padding: 40, textAlign: "center" }}
+                >
+                  페이지를 찾을 수 없습니다.
+                </div>
+              }
+            />
+          </Routes>
+        </div>
+        {/* 광고 영역: 1200px 이상에서만 표시, 서비스 영역 오른쪽에서 100px 떨어진 위치에 고정 */}
+        {typeof window !== "undefined" &&
+          window.innerWidth > 1200 &&
+          adLeft !== null && (
+            <div
+              className="ad-fixed"
+              style={{
+                width: 320,
+                minWidth: 300,
+                position: "fixed",
+                left: adLeft,
+                top: 80,
+                height: "600px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-start",
+                zIndex: 100,
+              }}
+            >
+              <GoogleAd />
+            </div>
+          )}
       </div>
-      {/* 광고 영역: 1200px 이상에서만 표시, 서비스 영역 오른쪽에서 100px 떨어진 위치에 고정 */}
-      {typeof window !== "undefined" &&
-        window.innerWidth > 1200 &&
-        adLeft !== null && (
-          <div
-            className="ad-fixed"
-            style={{
-              width: 320,
-              minWidth: 300,
-              position: "fixed",
-              left: adLeft,
-              top: 80,
-              height: "600px",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "flex-start",
-              zIndex: 100,
-            }}
-          >
-            <GoogleAd />
-          </div>
-        )}
+      {/* 푸터: 사이드바 제외 전체 가로의 가운데에 위치 */}
       <footer
         style={{
-          position: "fixed",
-          left: 0,
-          bottom: 0,
-          width: "100vw",
+          width: "100%",
           textAlign: "center",
           color: "#f3f4f6",
           fontSize: 14,
-          padding: "16px 0 12px 0",
+          padding: "32px 0 12px 0",
           background: "transparent",
-          zIndex: 100,
-          pointerEvents: "none",
           userSelect: "none",
         }}
       >
