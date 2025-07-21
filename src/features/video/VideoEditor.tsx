@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
-import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 
 function fetchFile(file: File): Promise<Uint8Array> {
@@ -21,17 +20,19 @@ export default function VideoEditor() {
   const [ready, setReady] = useState(false);
   const [video, setVideo] = useState<File | null>(null);
   const [clips, setClips] = useState<Clip[]>([]);
-  const [range, setRange] = useState<[number, number]>([0, 0]);
-  const [duration, setDuration] = useState(0);
+  const [, setRange] = useState<[number, number]>([0, 0]);
+  const [, setDuration] = useState(0);
   const [processing, setProcessing] = useState(false);
   const [outputUrl, setOutputUrl] = useState<string | null>(null);
   const [error, setError] = useState("");
-  const [thumbnails, setThumbnails] = useState<string[]>([]); // 썸네일 이미지 URL 배열
-  const [currentTime, setCurrentTime] = useState(0); // 현재 재생 위치
+  const [, setThumbnails] = useState<string[]>([]); // 썸네일 이미지 URL 배열
+  const [, setCurrentTime] = useState(0); // 현재 재생 위치
   const videoRef = useRef<HTMLVideoElement>(null);
   const ffmpeg = useRef<any>(null);
   const [start, setStart] = useState("0");
   const [end, setEnd] = useState("");
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [autoAdd, setAutoAdd] = useState(true);
 
   React.useEffect(() => {
     ffmpeg.current = new FFmpeg();
@@ -102,22 +103,14 @@ export default function VideoEditor() {
     if (video) await extractThumbnails(video, dur);
   };
 
-  const handleRangeChange = (vals: number | number[]) => {
-    if (Array.isArray(vals)) setRange([vals[0], vals[1]]);
-  };
-
-  const handleAddClip = () => {
-    if (
-      !start ||
-      !end ||
-      isNaN(Number(start)) ||
-      isNaN(Number(end)) ||
-      Number(start) >= Number(end)
-    ) {
+  const handleAddClip = (customStart?: number, customEnd?: number) => {
+    const s = customStart !== undefined ? customStart : Number(start);
+    const e = customEnd !== undefined ? customEnd : Number(end);
+    if (!s || !e || isNaN(s) || isNaN(e) || s >= e) {
       setError("올바른 시작/끝 시간을 입력하세요.");
       return;
     }
-    setClips([...clips, { start: Number(start), end: Number(end) }]);
+    setClips([...clips, { start: s, end: e }]);
     setError("");
   };
 
@@ -177,8 +170,14 @@ export default function VideoEditor() {
   };
 
   function formatTime(sec: number) {
-    const m = Math.floor(sec / 60);
+    const h = Math.floor(sec / 3600);
+    const m = Math.floor((sec % 3600) / 60);
     const s = Math.floor(sec % 60);
+    if (h > 0) {
+      return `${h}:${m.toString().padStart(2, "0")}:${s
+        .toString()
+        .padStart(2, "0")}`;
+    }
     return `${m}:${s.toString().padStart(2, "0")}`;
   }
 
@@ -201,11 +200,15 @@ export default function VideoEditor() {
       setRange([t, Number(end) || t]);
     }
   };
+  // setEndToCurrent에서 autoAdd가 true일 때만 자동 추가
   const setEndToCurrent = () => {
     if (videoRef.current) {
       const t = Math.floor(videoRef.current.currentTime);
       setEnd(t.toString());
       setRange([Number(start) || 0, t]);
+      if (autoAdd && start && !isNaN(Number(start)) && Number(start) < t) {
+        handleAddClip(Number(start), t);
+      }
     }
   };
 
@@ -221,7 +224,7 @@ export default function VideoEditor() {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [videoRef, end, start]);
+  });
 
   return (
     <div
@@ -246,8 +249,65 @@ export default function VideoEditor() {
           flexDirection: "column",
           alignItems: "center",
           width: "100%",
+          position: "relative",
         }}
       >
+        {/* 우측 상단 ? 아이콘 및 툴팁 */}
+        <div style={{ position: "absolute", top: 24, right: 24, zIndex: 10 }}>
+          <div
+            style={{
+              width: 32,
+              height: 32,
+              borderRadius: "50%",
+              background: "#333",
+              color: "#fff",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontWeight: 900,
+              fontSize: 22,
+              cursor: "pointer",
+              boxShadow: "0 2px 8px 0 rgba(0,0,0,0.10)",
+            }}
+            onMouseEnter={() => setShowTooltip(true)}
+            onMouseLeave={() => setShowTooltip(false)}
+          >
+            ?
+          </div>
+          {showTooltip && (
+            <div
+              style={{
+                position: "absolute",
+                top: 40,
+                right: 0,
+                background: "#23272b",
+                color: "#fff",
+                borderRadius: 8,
+                boxShadow: "0 2px 12px 0 rgba(0,0,0,0.18)",
+                padding: 18,
+                fontSize: 15,
+                width: 320,
+                zIndex: 20,
+                whiteSpace: "pre-line",
+                border: "1px solid #444",
+              }}
+            >
+              {`
+영상 자르기 사용법
+
+- 파일 선택 후 영상을 재생/탐색하며 원하는 구간을 지정하세요.
+- [J] : 현재 위치를 구간 시작으로 지정
+- [K] : 현재 위치를 구간 끝으로 지정
+- [A] : 구간 추가
+
+- 여러 구간을 추가한 뒤 "구간 합치기"를 누르면, 모든 구간이 하나의 영상으로 합쳐집니다.
+- 구간 리스트에서 삭제도 가능합니다.
+
+- "구간 자동 추가 ON" 상태에서 구간 끝을 누르면, 구간이 자동으로 추가됩니다.
+              `}
+            </div>
+          )}
+        </div>
         <h2
           style={{
             fontWeight: 700,
@@ -349,37 +409,63 @@ export default function VideoEditor() {
             >
               현재 구간: {formatTime(Number(start))} ~ {formatTime(Number(end))}
             </div>
-            <div style={{ display: "flex", gap: 12, marginBottom: 12 }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 8,
+                marginBottom: 12,
+                alignItems: "center",
+              }}
+            >
               <button
-                onClick={setStartToCurrent}
+                onClick={() => setAutoAdd((v) => !v)}
                 style={{
                   padding: "6px 16px",
                   borderRadius: 8,
-                  border: "none",
-                  background: "#e5e7eb",
-                  color: "#181c1f",
+                  border: autoAdd ? "2px solid #60a5fa" : "2px solid #aaa",
+                  background: autoAdd ? "#e0f2fe" : "#23272b",
+                  color: autoAdd ? "#181c1f" : "#e5e7eb",
                   fontWeight: 700,
                   fontSize: 15,
                   cursor: "pointer",
+                  marginBottom: 8,
                 }}
               >
-                구간 시작(현재 위치) [J]
+                구간 자동 추가 {autoAdd ? "ON" : "OFF"}
               </button>
-              <button
-                onClick={setEndToCurrent}
-                style={{
-                  padding: "6px 16px",
-                  borderRadius: 8,
-                  border: "none",
-                  background: "#e5e7eb",
-                  color: "#181c1f",
-                  fontWeight: 700,
-                  fontSize: 15,
-                  cursor: "pointer",
-                }}
-              >
-                구간 끝(현재 위치) [K]
-              </button>
+              <div style={{ display: "flex", gap: 12 }}>
+                <button
+                  onClick={setStartToCurrent}
+                  style={{
+                    padding: "6px 16px",
+                    borderRadius: 8,
+                    border: "none",
+                    background: "#e5e7eb",
+                    color: "#181c1f",
+                    fontWeight: 700,
+                    fontSize: 15,
+                    cursor: "pointer",
+                  }}
+                >
+                  구간 시작(현재 위치) [J]
+                </button>
+                <button
+                  onClick={setEndToCurrent}
+                  style={{
+                    padding: "6px 16px",
+                    borderRadius: 8,
+                    border: "none",
+                    background: "#e5e7eb",
+                    color: "#181c1f",
+                    fontWeight: 700,
+                    fontSize: 15,
+                    cursor: "pointer",
+                  }}
+                >
+                  구간 끝(현재 위치) [K]
+                </button>
+              </div>
             </div>
           </>
         )}
@@ -436,7 +522,7 @@ export default function VideoEditor() {
             }}
           >
             <button
-              onClick={handleAddClip}
+              onClick={() => handleAddClip()}
               disabled={!ready || processing || Number(end) - Number(start) < 1}
               style={{
                 width: 180,
