@@ -18,6 +18,7 @@ import { HelmetProvider } from "react-helmet-async";
 import GoogleAd from "./components/GoogleAd.tsx";
 import HashGenerator from "./features/dev/HashGenerator.tsx";
 import JwtDecode from "./features/dev/JwtDecode.tsx";
+import VideoEditor from "./features/video/VideoEditor.tsx";
 
 // 탭/경로 매핑
 const topTabs = [
@@ -31,6 +32,7 @@ const sideTabs = {
     { label: "치지직", path: "/replay/chzzk" },
     { label: "유튜브", path: "/replay/youtube" },
     { label: "숲", path: "/replay/soop" },
+    { label: "영상 자르기", path: "/replay/video-edit" },
   ],
   dev: [
     { label: "JSON format", path: "/dev/json-format" },
@@ -52,6 +54,8 @@ function MainLayout() {
     activeTopTab = "다시보기";
     if (location.pathname === "/replay/youtube") activeSideTab = "유튜브";
     else if (location.pathname === "/replay/soop") activeSideTab = "숲";
+    else if (location.pathname === "/replay/video-edit")
+      activeSideTab = "영상 자르기";
     else activeSideTab = "치지직";
   } else if (location.pathname.startsWith("/dev")) {
     activeTopTab = "개발";
@@ -80,6 +84,7 @@ function MainLayout() {
       if (tab === "치지직") navigate("/replay/chzzk");
       else if (tab === "유튜브") navigate("/replay/youtube");
       else if (tab === "숲") navigate("/replay/soop");
+      else if (tab === "영상 자르기") navigate("/replay/video-edit");
     } else if (activeTopTab === "개발") {
       if (tab === "JSON format") navigate("/dev/json-format");
       else if (tab === "해시 생성") navigate("/dev/hash-generator");
@@ -175,6 +180,7 @@ function MainLayout() {
             <Route path="/replay/chzzk" element={<ChzzkReplay />} />
             <Route path="/replay/youtube" element={<YoutubeReplay />} />
             <Route path="/replay/soop" element={<SoopReplay />} />
+            <Route path="/replay/video-edit" element={<VideoEditor />} />
             <Route path="/dev/json-format" element={<JsonFormat />} />
             <Route path="/travel/agoda" element={<AgodaLowest />} />
             <Route path="/dev/hash-generator" element={<HashGenerator />} />
@@ -193,18 +199,6 @@ function MainLayout() {
               }
             />
           </Routes>
-          <footer
-            style={{
-              textAlign: "center",
-              color: "#f3f4f6",
-              fontSize: 14,
-              marginTop: 40,
-              paddingBottom: 24,
-              textShadow: "0 0 6px #fff",
-            }}
-          >
-            © {new Date().getFullYear()} 툴박스
-          </footer>
         </div>
       </div>
       {/* 우측 광고 영역 */}
@@ -224,6 +218,24 @@ function MainLayout() {
       >
         <GoogleAd />
       </div>
+      <footer
+        style={{
+          position: "fixed",
+          left: 0,
+          bottom: 0,
+          width: "100vw",
+          textAlign: "center",
+          color: "#f3f4f6",
+          fontSize: 14,
+          padding: "16px 0 12px 0",
+          background: "transparent",
+          zIndex: 100,
+          pointerEvents: "none",
+          userSelect: "none",
+        }}
+      >
+        © {new Date().getFullYear()} 툴박스
+      </footer>
     </div>
   );
 }
